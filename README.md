@@ -6,7 +6,7 @@ Cmake is used as the build system
 
 ## Input / Output
 ### Inputs
-Custom assembly compiler / linker. Emulator should provide support for running these files.
+Custom assembly compiler / linker. Emulator should provide support for running these files
 ### Outputs
 Console output
-Window output may be supported later.
+Window output may be supported later
