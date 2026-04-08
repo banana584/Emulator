@@ -8,7 +8,10 @@ struct Cache Cache_create(const struct BinSize size, const struct BinSize fetch_
     // Allocate size in byte form number of uint8s
     struct BinSize bytes = Mem_convert(size, BYTE);
 
-    cache.arr = (uint8_t*)malloc(sizeof(uint8_t) * cache.size.amount);
+    cache.arr = (uint8_t*)malloc(sizeof(uint8_t) * bytes.amount);
+    for (uint64_t i = 0; i < bytes.amount; i++) {
+        cache.arr[i] = 0;
+    }
 
     return cache;
 }
@@ -34,7 +37,7 @@ void Cache_fetch(struct Cache* cache, const struct RAM* RAM, const uint16_t inde
     uint16_t write_i = 0;
     for (uint16_t i = start; i < end; i++) {
         // Bounds check
-        if (i < 0 || i > RAM_bytes.amount) {
+        if (i > RAM_bytes.amount) {
             cache->arr[write_i] = 0;
             write_i++;
             continue;

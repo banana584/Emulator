@@ -4,7 +4,7 @@ struct BinSize Mem_convert(const struct BinSize current, const DataSize target) 
     // Create new instance with requested units
     struct BinSize new = { target, 0 };
 
-    uint8_t difference = target - current.unit;
+    int8_t difference = target - current.unit;
 
     // Check if we are going up, down or the same
     if (difference > 0) {
@@ -18,6 +18,28 @@ struct BinSize Mem_convert(const struct BinSize current, const DataSize target) 
     } else {
         // Target is equal, keep the same.
         new.amount = current.amount;
+    }
+
+    return new;
+}
+
+struct BinSize Mem_simplify(const struct BinSize current) {
+    struct BinSize new = { current.unit, current.amount };
+
+    // Check if amount can be lowered (if it is over 1024)
+    while (new.amount > 1024) {
+        if (new.unit + 1 < new.unit) {
+            break;
+        }
+        new = Mem_convert(new, new.unit + 1);
+    }
+
+    // Check if amount can be raised (if it is a decimal)
+    while (new.amount != round(new.amount)) {
+        if (new.unit - 1 > new.unit) {
+            break;
+        }
+        new = Mem_convert(new, new.unit - 1);
     }
 
     return new;
@@ -45,5 +67,5 @@ void Mem_print(const struct BinSize size) {
     }
 
     // Print with specified format
-    printf("%d %s", size.amount, ending);
+    printf("%f %s", size.amount, ending);
 }

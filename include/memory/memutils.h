@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <math.h>
 
 /**
  * @enum DataSize
@@ -28,7 +29,7 @@ typedef enum DataSize {
  */
 struct BinSize {
     DataSize unit; // The units amount is measured in.
-    uint16_t amount; // The amount of data measured in units.
+    double amount; // The amount of data measured in units.
 };
 
 /**
@@ -41,6 +42,16 @@ struct BinSize {
  * @return The new BinSize with requested units.
  */
 struct BinSize Mem_convert(const struct BinSize current, const DataSize target);
+
+/**
+ * @brief Simplifies a BinSize into its smallest form.
+ * 
+ * Converts a BinSize downwards if it can, and upwards if it is too small.
+ * 
+ * @param current A BinSize to be simplified. Is not modified.
+ * @return The new simplified BinSize instance.
+ */
+struct BinSize Mem_simplify(const struct BinSize current);
 
 /**
  * @brief Prints a BinSize instance to stdout.

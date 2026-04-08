@@ -28,7 +28,6 @@ struct Status Register_bytes_to_status(const uint8_t data) {
     status.carry = CHECK_BIT(data, 1);
     status.zero = CHECK_BIT(data, 2);
     status.int_disable = CHECK_BIT(data, 3);
-    status.decimal_mode = CHECK_BIT(data, 4);
     status.break_command = CHECK_BIT(data, 5);
     status.overflow = CHECK_BIT(data, 6);
     status.negative = CHECK_BIT(data, 7);
@@ -38,7 +37,7 @@ struct Status Register_bytes_to_status(const uint8_t data) {
 
 uint8_t Register_status_to_bytes(const struct Status status) {
     // Create mask of each bit in each position
-    uint8_t mask = (status.carry << 1) | (status.zero << 2) | (status.int_disable << 3) | (status.decimal_mode << 4) | (status.break_command << 5) | (status.overflow << 6) | (status.negative << 7);
+    uint8_t mask = (status.carry << 1) | (status.zero << 2) | (status.int_disable << 3) | (status.break_command << 5) | (status.overflow << 6) | (status.negative << 7);
 
     return mask;
 }
@@ -61,7 +60,7 @@ void Register_write_pc(struct RegisterArray* registers, const uint16_t data) {
     uint8_t pc1 = data & mask;
 
     // Swap mask
-    mask = !mask;
+    mask = 0x00FF;
 
     // Get right side of data
     uint8_t pc2 = data & mask;
@@ -80,6 +79,35 @@ uint16_t Register_read_pc(const struct RegisterArray* registers) {
     uint16_t pc = (pc1 << 8) | (pc2);
 
     return pc;
+}
+
+void Register_write_stack_ptr(struct RegisterArray* registers, const uint16_t data) {
+    // Create mask of 8 1s and 8 0s
+    uint16_t mask = 0xFF00;
+    
+    // Get left side of data
+    uint8_t ptr1 = data & mask;
+
+    // Swap mask
+    mask = !mask;
+
+    // Get right side of data
+    uint8_t ptr2 = data & mask;
+
+    // Write each side
+    Register_write(registers, STACK_POINTER1, ptr1);
+    Register_write(registers, STACK_POINTER2, ptr2);
+}
+
+uint16_t Register_read_stack_ptr(const struct RegisterArray* registers) {
+    // Read each half
+    uint8_t ptr1 = Register_read(registers, STACK_POINTER1);
+    uint8_t ptr2 = Register_read(registers, STACK_POINTER2);
+
+    // Shift into position and or together
+    uint16_t ptr = (ptr1 << 8) | (ptr2);
+
+    return ptr;
 }
 
 void Register_write_status(struct RegisterArray* registers, const struct Status data) {

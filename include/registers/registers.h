@@ -22,7 +22,8 @@ typedef enum RegisterType {
     ACCUMULATOR_B, // Accumulator B - stores numbers for operations
     X_REG, // Side register that can be swapped with accumulator
     Y_REG, // Side register than can be swapped with accumulator
-    STACK_POINTER, // Stores address of the top of the stack
+    STACK_POINTER1, // Stores address of the top of the stack
+    STACK_POINTER2,
     STATUS, // The status of processor and last operation
     NUM_REG_TYPES // Number of registers
 } RegisterType;
@@ -62,7 +63,6 @@ struct Status {
     bool carry; // Set if operation caused overflow in bit 7 or underflow in bit 0
     bool zero; // Set if last operation was 0
     bool int_disable; // Set if interrupts are disabled
-    bool decimal_mode; // Set if processor will follow BCD rules
     bool break_command; // Set when BRK is called and an interrupt is generated for it
     bool overflow; // Set if a result is invalid, meaning there was an overflow
     bool negative; // Set if the result was negative in 2s complement
@@ -153,6 +153,26 @@ void Register_write_pc(struct RegisterArray* registers, const uint16_t data);
  * @return The current program counter value.
  */
 uint16_t Register_read_pc(const struct RegisterArray* registers);
+
+/**
+ * @brief Writes a stack pointer to registers.
+ * 
+ * Splits 16 bit value into 2 8 bit values and writes to registers.
+ * 
+ * @param registers The register array to write to.
+ * @param data The 16 bit stack pointer to write.
+ */
+void Register_write_stack_ptr(struct RegisterArray* registers, const uint16_t data);
+
+/**
+ * @brief Reads a stack pointer from registers.
+ * 
+ * Reads 2 8 bit values from registers and merges into 1 16 bit value.
+ * 
+ * @param registers The register array to read from.
+ * @return The current stack pointer value.
+ */
+uint16_t Register_read_stack_ptr(const struct RegisterArray* registers);
 
 /**
  * @brief Writes a Status struct to registers.

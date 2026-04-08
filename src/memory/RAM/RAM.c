@@ -9,6 +9,9 @@ struct RAM RAM_create(const struct BinSize size, struct Cache* cache) {
     struct BinSize bytes = Mem_convert(size, BYTE);
 
     RAM.arr = (uint8_t*)malloc(sizeof(uint8_t) * bytes.amount);
+    for (uint64_t i = 0; i < bytes.amount; i++) {
+        RAM.arr[i] = 0;
+    }
 
     return RAM;
 }
@@ -22,7 +25,9 @@ void RAM_destroy(struct RAM* RAM) {
 void RAM_write(struct RAM* RAM, const uint16_t index, const uint8_t data) {
     // Write and mark cache as invalid
     RAM->arr[index] = data;
-    RAM->invalidated = true;
+    if (index > RAM->cache->start && index < RAM->cache->end) {
+        RAM->invalidated = true;
+    }
 }
 
 uint8_t RAM_read(const struct RAM* RAM, const uint16_t index) {

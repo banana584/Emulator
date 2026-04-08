@@ -13,17 +13,90 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 add_library(Registers SHARED
     src/registers/registers.c
 )
+add_library(Memory SHARED
+    src/memory/memutils.c
+)
 add_library(RAM SHARED
     src/memory/RAM/RAM.c
 )
 add_library(Cache SHARED
     src/memory/cache/cache.c
 )
-add_library(Memory SHARED
-    src/memory/memutils.c
+add_library(ROM SHARED
+    src/memory/ROM/ROM.c
+)
+add_library(CPUUtils SHARED
+    src/CPU/CPUutils.c
+)
+add_library(Interrupts SHARED
+    src/CPU/interrupts/Interrupts.c
+)
+add_library(CPU SHARED
+    src/CPU/CPU.c
 )
 
-target_link_libraries(Memory RAM Cache)
+target_link_libraries(Memory m)
+target_link_libraries(Cache Memory)
+target_link_libraries(RAM Memory Cache)
+target_link_libraries(Interrupts CPUUtils)
+target_link_libraries(CPU RAM ROM Cache Registers CPUUtils Interrupts)
+
+target_compile_options(Registers PRIVATE
+    -Wall
+    -Wextra
+    -Werror
+    -Wpedantic
+    -g
+)
+target_compile_options(Memory PRIVATE
+    -Wall
+    -Wextra
+    -Werror
+    -Wpedantic
+    -g
+)
+target_compile_options(RAM PRIVATE
+    -Wall
+    -Wextra
+    -Werror
+    -Wpedantic
+    -g
+)
+target_compile_options(Cache PRIVATE
+    -Wall
+    -Wextra
+    -Werror
+    -Wpedantic
+    -g
+)
+target_compile_options(ROM PRIVATE
+    -Wall
+    -Wextra
+    -Werror
+    -Wpedantic
+    -g
+)
+target_compile_options(CPUUtils PRIVATE
+    -Wall
+    -Wextra
+    -Werror
+    -Wpedantic
+    -g
+)
+target_compile_options(Interrupts PRIVATE
+    -Wall
+    -Wextra
+    -Werror
+    -Wpedantic
+    -g
+)
+target_compile_options(CPU PRIVATE
+    -Wall
+    -Wextra
+    -Werror
+    -Wpedantic
+    -g
+)
 
 add_executable(${CMAKE_PROJECT_NAME}
     src/main.c
@@ -34,6 +107,7 @@ target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
     -Wextra
     -Werror
     -Wpedantic
+    -g
 )
 
-target_link_libraries(${CMAKE_PROJECT_NAME} Registers Memory)
+target_link_libraries(${CMAKE_PROJECT_NAME} Registers RAM Cache ROM CPU)
