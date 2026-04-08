@@ -1,4 +1,4 @@
-#include "../../../include/memory/ROM/ROM.h"
+#include "../../../../include/emulator/memory/ROM/ROM.h"
 
 char* strdup (const char* s) {
     size_t slen = strlen(s);

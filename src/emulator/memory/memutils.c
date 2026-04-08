@@ -1,4 +1,4 @@
-#include "../../include/memory/memutils.h"
+#include "../../../include/emulator/memory/memutils.h"
 
 struct BinSize Mem_convert(const struct BinSize current, const DataSize target) {
     // Create new instance with requested units

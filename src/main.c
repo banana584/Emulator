@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <ctype.h>
-#include "../include/CPU/CPU.h"
-#include "../include/CPU/interrupts/Interrupts.h"
+#include "../include/emulator/CPU/CPU.h"
+#include "../include/emulator/CPU/interrupts/Interrupts.h"
 
 void Interrupt(struct CPU* CPU, uint16_t param) {
     param = param;

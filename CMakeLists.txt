@@ -11,28 +11,28 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 add_library(Registers SHARED
-    src/registers/registers.c
+    src/emulator/registers/registers.c
 )
 add_library(Memory SHARED
-    src/memory/memutils.c
+    src/emulator/memory/memutils.c
 )
 add_library(RAM SHARED
-    src/memory/RAM/RAM.c
+    src/emulator/memory/RAM/RAM.c
 )
 add_library(Cache SHARED
-    src/memory/cache/cache.c
+    src/emulator/memory/cache/cache.c
 )
 add_library(ROM SHARED
-    src/memory/ROM/ROM.c
+    src/emulator/memory/ROM/ROM.c
 )
 add_library(CPUUtils SHARED
-    src/CPU/CPUutils.c
+    src/emulator/CPU/CPUutils.c
 )
 add_library(Interrupts SHARED
-    src/CPU/interrupts/Interrupts.c
+    src/emulator/CPU/interrupts/Interrupts.c
 )
 add_library(CPU SHARED
-    src/CPU/CPU.c
+    src/emulator/CPU/CPU.c
 )
 
 target_link_libraries(Memory m)

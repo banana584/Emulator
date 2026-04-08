@@ -1,5 +1,5 @@
-#include "../../../include/memory/cache/cache.h"
-#include "../../../include/memory/RAM/RAM.h"
+#include "../../../../include/emulator/memory/cache/cache.h"
+#include "../../../../include/emulator/memory/RAM/RAM.h"
 
 struct Cache Cache_create(const struct BinSize size, const struct BinSize fetch_size) {
     // Initialize cache to be correct values

@@ -1,5 +1,5 @@
-#include "../../include/CPU/CPU.h"
-#include "../../include/CPU/interrupts/Interrupts.h"
+#include "../../../include/emulator/CPU/CPU.h"
+#include "../../../include/emulator/CPU/interrupts/Interrupts.h"
 
 // Map of every instruction
 Instruction instruction_map[256] = {

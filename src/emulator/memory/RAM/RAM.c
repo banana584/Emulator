@@ -1,5 +1,5 @@
-#include "../../../include/memory/RAM/RAM.h"
-#include "../../../include/memory/cache/cache.h"
+#include "../../../../include/emulator/memory/RAM/RAM.h"
+#include "../../../../include/emulator/memory/cache/cache.h"
 
 struct RAM RAM_create(const struct BinSize size, struct Cache* cache) {
     // Initialize RAM with values

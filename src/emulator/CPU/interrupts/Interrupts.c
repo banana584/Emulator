@@ -1,5 +1,5 @@
-#include "../../../include/CPU/interrupts/Interrupts.h"
-#include "../../../include/CPU/CPU.h"
+#include "../../../../include/emulator/CPU/interrupts/Interrupts.h"
+#include "../../../../include/emulator/CPU/CPU.h"
 
 bool less_than(struct Interrupt* a, struct Interrupt* b) {
     // Maskability has priority over id
