@@ -4,13 +4,13 @@
 // Map of every instruction
 Instruction instruction_map[256] = {
     CPU_LDA,
+    CPU_LDA_addr,
     CPU_LDB,
+    CPU_LDB_addr,
     CPU_LDX,
+    CPU_LDX_addr,
     CPU_LDY,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
+    CPU_LDY_addr,
     0x0,
     0x0,
     0x0,
@@ -52,13 +52,13 @@ Instruction instruction_map[256] = {
     0x0,
     0x0,
     CPU_CPA,
+    CPU_CPA_addr,
     CPU_CPB,
+    CPU_CPB_addr,
     CPU_CPX,
+    CPU_CPX_addr,
     CPU_CPY,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
+    CPU_CPY_addr,
     0x0,
     0x0,
     0x0,
@@ -116,13 +116,13 @@ Instruction instruction_map[256] = {
     0x0,
     0x0,
     CPU_JMP,
+    CPU_JMP_addr,
     CPU_JIE,
+    CPU_JIE_addr,
     CPU_JIL,
+    CPU_JIL_addr,
     CPU_JIG,
-    0x0,
-    0x0,
-    0x0,
-    0x0,
+    CPU_JIG_addr,
     0x0,
     0x0,
     0x0,
@@ -165,7 +165,7 @@ struct ClockSpeed CPU_convert(const struct ClockSpeed current, CycleAmount targe
         uint16_t multiplier = 1000 * difference;
         new.amount = current.amount * multiplier;
     } else {
-        // Target is equal, keep the same.
+        // Target is equal, keep the same
         new.amount = current.amount;
     }
 
@@ -310,9 +310,19 @@ void CPU_LDA(struct CPU* CPU, uint16_t param) {
     Register_write(CPU->registers, ACCUMULATOR_A, param);
 }
 
+void CPU_LDA_addr(struct CPU* CPU, uint16_t param) {
+    // Read data at param and write into A
+    CPU_LDA(CPU, RAM_read(CPU->RAM, param));
+}
+
 void CPU_LDB(struct CPU* CPU, uint16_t param) {
     // Write param into B
     Register_write(CPU->registers, ACCUMULATOR_B, param);
+}
+
+void CPU_LDB_addr(struct CPU* CPU, uint16_t param) {
+    // Read data at param and write into B
+    CPU_LDB(CPU, RAM_read(CPU->RAM, param));
 }
 
 void CPU_LDX(struct CPU* CPU, uint16_t param) {
@@ -320,9 +330,19 @@ void CPU_LDX(struct CPU* CPU, uint16_t param) {
     Register_write(CPU->registers, X_REG, param);
 }
 
+void CPU_LDX_addr(struct CPU* CPU, uint16_t param) {
+    // Read data at param and write into X
+    CPU_LDX(CPU, RAM_read(CPU->RAM, param));
+}
+
 void CPU_LDY(struct CPU* CPU, uint16_t param) {
     // Write param into Y
     Register_write(CPU->registers, Y_REG, param);
+}
+
+void CPU_LDY_addr(struct CPU* CPU, uint16_t param) {
+    // Read data at param and write into Y
+    CPU_LDY(CPU, RAM_read(CPU->RAM, param));
 }
 
 void CPU_STA(struct CPU* CPU, uint16_t param) {
@@ -425,6 +445,11 @@ void CPU_CPA(struct CPU* CPU, uint16_t param) {
     Register_write_status(CPU->registers, status);
 }
 
+void CPU_CPA_addr(struct CPU* CPU, uint16_t param) {
+    // Read value at param and compare with A
+    CPU_CPA(CPU, RAM_read(CPU->RAM, param));
+}
+
 void CPU_CPB(struct CPU* CPU, uint16_t param) {
     // Get value in B
     uint16_t value = Register_read(CPU->registers, ACCUMULATOR_B);
@@ -448,6 +473,11 @@ void CPU_CPB(struct CPU* CPU, uint16_t param) {
 
     // Write status back
     Register_write_status(CPU->registers, status);
+}
+
+void CPU_CPB_addr(struct CPU* CPU, uint16_t param) {
+    // Read value at param and compare with B
+    CPU_CPB(CPU, RAM_read(CPU->RAM, param));
 }
 
 void CPU_CPX(struct CPU* CPU, uint16_t param) {
@@ -475,6 +505,11 @@ void CPU_CPX(struct CPU* CPU, uint16_t param) {
     Register_write_status(CPU->registers, status);
 }
 
+void CPU_CPX_addr(struct CPU* CPU, uint16_t param) {
+    // Read value at param and compare with X
+    CPU_CPX(CPU, RAM_read(CPU->RAM, param));
+}
+
 void CPU_CPY(struct CPU* CPU, uint16_t param) {
     // Get value in Y
     uint16_t value = Register_read(CPU->registers, Y_REG);
@@ -498,6 +533,11 @@ void CPU_CPY(struct CPU* CPU, uint16_t param) {
 
     // Write status back
     Register_write_status(CPU->registers, status);
+}
+
+void CPU_CPY_addr(struct CPU* CPU, uint16_t param) {
+    // Read value at param and compare with Y
+    CPU_CPY(CPU, RAM_read(CPU->RAM, param));
 }
 
 void CPU_ADD(struct CPU* CPU, uint16_t param) {
@@ -783,6 +823,11 @@ void CPU_JMP(struct CPU* CPU, uint16_t param) {
     Register_write_pc(CPU->registers, param);
 }
 
+void CPU_JMP_addr(struct CPU* CPU, uint16_t param) {
+    // Read value at param and jump to it
+    CPU_JMP(CPU, RAM_read(CPU->RAM, param));
+}
+
 void CPU_JIE(struct CPU* CPU, uint16_t param) {
     struct Status status = Register_read_status(CPU->registers);
 
@@ -790,6 +835,11 @@ void CPU_JIE(struct CPU* CPU, uint16_t param) {
     if (status.zero) {
         Register_write_pc(CPU->registers, param);
     }
+}
+
+void CPU_JIE_addr(struct CPU* CPU, uint16_t param) {
+    // Read value at param and jump if last compare was equal
+    CPU_JIE(CPU, RAM_read(CPU->RAM, param));
 }
 
 void CPU_JIL(struct CPU* CPU, uint16_t param) {
@@ -801,6 +851,11 @@ void CPU_JIL(struct CPU* CPU, uint16_t param) {
     }
 }
 
+void CPU_JIL_addr(struct CPU* CPU, uint16_t param) {
+    // Read value at param and jump if last compare was less than
+    CPU_JIL(CPU, RAM_read(CPU->RAM, param));
+}
+
 void CPU_JIG(struct CPU* CPU, uint16_t param) {
     struct Status status = Register_read_status(CPU->registers);
 
@@ -808,6 +863,11 @@ void CPU_JIG(struct CPU* CPU, uint16_t param) {
     if (!status.zero && status.carry) {
         Register_write_pc(CPU->registers, param);
     }
+}
+
+void CPU_JIG_addr(struct CPU* CPU, uint16_t param) {
+    // Read value at param and jump if last compare was greater than
+    CPU_JIG(CPU, RAM_read(CPU->RAM, param));
 }
 
 void CPU_NOP(struct CPU* CPU, uint16_t param) {

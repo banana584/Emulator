@@ -176,6 +176,16 @@ void CPU_run_limitless(struct CPU* CPU);
 void CPU_LDA(struct CPU* CPU, uint16_t param);
 
 /**
+ * @brief Loads a value in RAM into Accumulator A.
+ * 
+ * Loads a value from RAM at param into the CPU register A.
+ * 
+ * @param CPU The CPU whose registers should be modified.
+ * @param param The address of the value to load into Accumulator A.
+ */
+void CPU_LDA_addr(struct CPU* CPU, uint16_t param);
+
+/**
  * @brief Loads a value into Accumulator B.
  * 
  * Loads the value in param into the CPU register B.
@@ -184,6 +194,16 @@ void CPU_LDA(struct CPU* CPU, uint16_t param);
  * @param param The value to load into Accumulator B.
  */
 void CPU_LDB(struct CPU* CPU, uint16_t param);
+
+/**
+ * @brief Loads a value in RAM into Accumulator B.
+ * 
+ * Loads a value from RAM at param into the CPU register B.
+ * 
+ * @param CPU The CPU whose registers should be modified.
+ * @param param The address of the value to load into Accumulator B.
+ */
+void CPU_LDB_addr(struct CPU* CPU, uint16_t param);
 
 /**
  * @brief Loads a value into Index Register X.
@@ -196,6 +216,16 @@ void CPU_LDB(struct CPU* CPU, uint16_t param);
 void CPU_LDX(struct CPU* CPU, uint16_t param);
 
 /**
+ * @brief Loads a value in RAM into Index Register X.
+ * 
+ * Loads a value from RAM at param into the CPU register X.
+ * 
+ * @param CPU The CPU whose registers should be modified.
+ * @param param The address of the value to load into Index Register X.
+ */
+void CPU_LDX_addr(struct CPU* CPU, uint16_t param);
+
+/**
  * @brief Loads a value into Index Register Y.
  * 
  * Loads the value in param into the CPU register Y.
@@ -204,6 +234,16 @@ void CPU_LDX(struct CPU* CPU, uint16_t param);
  * @param param THe value to load into Index Register Y.
  */
 void CPU_LDY(struct CPU* CPU, uint16_t param);
+
+/**
+ * @brief Loads a value in RAM into Index Register Y.
+ * 
+ * Loads a value from RAM at param into the CPU register Y.
+ * 
+ * @param CPU The CPU whose registers should be modified.
+ * @param param The address of the value to load into Index Register Y.
+ */
+void CPU_LDY_addr(struct CPU* CPU, uint16_t param);
 
 /**
  * @brief Stores the value in Accumulator A onto the stack.
@@ -266,6 +306,16 @@ void CPU_BRK(struct CPU* CPU, uint16_t param);
 void CPU_CPA(struct CPU* CPU, uint16_t param);
 
 /**
+ * @brief Compares a value in RMA against Accumulator A.
+ * 
+ * Compares the value in RAM at param against register A and sets status flags accordingly.
+ * 
+ * @param CPU The CPU whose registers should be read and set.
+ * @param param The address of the value to compare against A.
+ */
+void CPU_CPA_addr(struct CPU* CPU, uint16_t param);
+
+/**
  * @brief Compares a value against Accumulator B.
  * 
  * Compares param against register B and sets status flags accordingly.
@@ -274,6 +324,16 @@ void CPU_CPA(struct CPU* CPU, uint16_t param);
  * @param param The value to compare against B.
  */
 void CPU_CPB(struct CPU* CPU, uint16_t param);
+
+/**
+ * @brief Compares a value in RMA against Accumulator B.
+ * 
+ * Compares the value in RAM at param against register B and sets status flags accordingly.
+ * 
+ * @param CPU The CPU whose registers should be read and set.
+ * @param param The address of the value to compare against B.
+ */
+void CPU_CPB_addr(struct CPU* CPU, uint16_t param);
 
 /**
  * @brief Compares a value against Index Register X.
@@ -286,6 +346,16 @@ void CPU_CPB(struct CPU* CPU, uint16_t param);
 void CPU_CPX(struct CPU* CPU, uint16_t param);
 
 /**
+ * @brief Compares a value in RMA against Index Register X.
+ * 
+ * Compares the value in RAM at param against register X and sets status flags accordingly.
+ * 
+ * @param CPU The CPU whose registers should be read and set.
+ * @param param The address of the value to compare against X.
+ */
+void CPU_CPX_addr(struct CPU* CPU, uint16_t param);
+
+/**
  * @brief Compares a value against Index Register Y.
  * 
  * Compares param against register Y and sets status flags accordingly.
@@ -294,6 +364,16 @@ void CPU_CPX(struct CPU* CPU, uint16_t param);
  * @param param The value to compare against Y.
  */
 void CPU_CPY(struct CPU* CPU, uint16_t param);
+
+/**
+ * @brief Compares a value in RMA against Index Register Y.
+ * 
+ * Compares the value in RAM at param against register Y and sets status flags accordingly.
+ * 
+ * @param CPU The CPU whose registers should be read and set.
+ * @param param The address of the value to compare against Y.
+ */
+void CPU_CPY_addr(struct CPU* CPU, uint16_t param);
 
 /**
  * @brief Adds Accumulator A and B.
@@ -506,6 +586,16 @@ void CPU_TYB(struct CPU* CPU, uint16_t param);
 void CPU_JMP(struct CPU* CPU, uint16_t param);
 
 /**
+ * @brief Set the program counter.
+ * 
+ * Change which instruction the CPU is executing from a value in RAM.
+ * 
+ * @param CPU The CPU whose program counter should be set.
+ * @param param The address of the new program counter in RAM.
+ */
+void CPU_JMP_addr(struct CPU* CPU, uint16_t param);
+
+/**
  * @brief Set the program counter on a condition.
  * 
  * Change which instruction the CPU is executing if the last Compare was equal.
@@ -518,12 +608,24 @@ void CPU_JIE(struct CPU* CPU, uint16_t param);
 /**
  * @brief Set the program counter on a condition.
  * 
+ * Change which instruction the CPU is executing from a value in RAM if the last Compare was equal.
+ * 
+ * @param CPU The CPU whose program counter should be set.
+ * @param param The address of the new program counter in RAM.
+ */
+void CPU_JIE_addr(struct CPU* CPI, uint16_t param);
+
+/**
+ * @brief Set the program counter on a condition.
+ * 
  * Change which instruction the CPU is executing if the last Compare was less than.
  * 
  * @param CPU The CPU whose program counter should be set.
  * @param param The new program counter.
  */
 void CPU_JIL(struct CPU* CPU, uint16_t param);
+
+void CPU_JIL_addr(struct CPU* CPU, uint16_t param);
 
 /**
  * @brief Set the program counter on a condition.
@@ -534,6 +636,8 @@ void CPU_JIL(struct CPU* CPU, uint16_t param);
  * @param param The new program counter.
  */
 void CPU_JIG(struct CPU* CPU, uint16_t param);
+
+void CPU_JIG_addr(struct CPU* CPU, uint16_t param);
 
 /**
  * @brief Does nothing for a cycle.
