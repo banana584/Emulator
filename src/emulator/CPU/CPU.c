@@ -273,8 +273,6 @@ void CPU_run_cycle(struct CPU* CPU) {
     // Check for interrupts
     Interrupt_handle(CPU);
 
-    printf("A = %d B = %d\n", Register_read(CPU->registers, ACCUMULATOR_A), Register_read(CPU->registers, ACCUMULATOR_B));
-
     // End clock timing
     Clock_end(CPU->clock);
 }
